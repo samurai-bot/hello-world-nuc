@@ -25,8 +25,8 @@ function App() {
         <hr className="divider" />
         
         <div className="info">
-          <p>Served from: <code>/hello</code></p>
-          <p>Server: NUC via Tailscale Funnel</p>
+          <p>Served from: <code>/</code></p>
+          <p>Server: NUC (local network)</p>
           <p>Version: 1.0.0</p>
         </div>
       </div>
