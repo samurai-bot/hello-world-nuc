@@ -1,44 +1,50 @@
-# Build stage
+# On your local machine
+cd ~/projects/hello-world
+
+cat > Dockerfile << 'EOF'
 FROM node:18-alpine AS builder
 
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json package-lock.json* ./
 
-# Use npm install instead of npm ci
+# Install dependencies
 RUN npm install
 
-# Copy source files
+# Copy source
 COPY . .
 
-# Build the app
+# Build
 RUN npm run build
 
-# Production stage
+# List what was built (for debugging)
+RUN ls -la /app/dist/
+
+# Production
 FROM nginx:alpine
 
-# Copy built files to /hello subdirectory
-COPY --from=builder /app/dist /usr/share/nginx/html/hello
+# Copy built files
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Create nginx config
+# Verify files were copied (for debugging)
+RUN ls -la /usr/share/nginx/html/
+
+# nginx config
 RUN echo 'server { \
     listen 80; \
     root /usr/share/nginx/html; \
     index index.html; \
-    \
-    location /hello { \
-        try_files $uri $uri/ /hello/index.html; \
-    } \
-    \
     location / { \
-        return 404; \
+        try_files $uri $uri/ /index.html; \
     } \
-    \
-    gzip on; \
-    gzip_types text/plain text/css application/json application/javascript text/xml application/xml text/javascript; \
 }' > /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]
+EOF
+
+# Commit and push
+git add Dockerfile
+git commit -m "Fix: Add debug output to Dockerfile"
+git push
