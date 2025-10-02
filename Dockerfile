@@ -1,7 +1,3 @@
-# On your local machine
-cd ~/projects/hello-world
-
-cat > Dockerfile << 'EOF'
 FROM node:18-alpine AS builder
 
 WORKDIR /app
@@ -42,9 +38,3 @@ RUN echo 'server { \
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
-EOF
-
-# Commit and push
-git add Dockerfile
-git commit -m "Fix: Add debug output to Dockerfile"
-git push
