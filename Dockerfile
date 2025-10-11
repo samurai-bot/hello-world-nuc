@@ -3,10 +3,10 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy package files
-COPY package.json package-lock.json* ./
+COPY package.json package-lock.json ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies with npm ci for faster, reproducible builds
+RUN npm ci --only=production=false
 
 # Copy source
 COPY . .
@@ -14,17 +14,11 @@ COPY . .
 # Build
 RUN npm run build
 
-# List what was built (for debugging)
-RUN ls -la /app/dist/
-
 # Production
 FROM nginx:alpine
 
 # Copy built files
 COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Verify files were copied (for debugging)
-RUN ls -la /usr/share/nginx/html/
 
 # nginx config
 RUN echo 'server { \
