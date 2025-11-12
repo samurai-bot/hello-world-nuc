@@ -89,6 +89,16 @@ h1 {
   cursor: not-allowed;
 }
 
+.decrement-button {
+  background: var(--reset-button-bg);
+  color: var(--text-primary);
+}
+
+.decrement-button:hover:not(:disabled) {
+  background: var(--reset-button-hover);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
 .reset-button {
   background: var(--reset-button-bg);
   color: var(--text-primary);
@@ -104,6 +114,13 @@ h1 {
   color: var(--primary-color);
   font-weight: bold;
   margin-top: 20px;
+}
+
+.keyboard-hint {
+  font-size: 0.85em;
+  color: var(--text-muted);
+  margin-top: 15px;
+  font-style: italic;
 }
 
 .divider {
